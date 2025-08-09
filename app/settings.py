@@ -37,9 +37,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "turnero",
     # ALLAUTH
     "allauth",
     "allauth.account",
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -72,15 +75,23 @@ TEMPLATES = [
     },
 ]
 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
 ACCOUNT_LOGIN_METHODS = ["email"]
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
+AUTH_USER_MODEL = "turnero.User"
+
 LOGIN_REDIRECT_URL = "/"
+
+# ACCOUNT_FORMS = {
+#         "signup": "turnero.forms.UserSignUpForm",
+# }
+
+ACCOUNT_ADAPTER = "turnero.adapters.UserAccountAdapter"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    # `allauth` specific authentication methods, such as login by email
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
@@ -116,6 +127,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# ALLAUTH SOCIAL
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
