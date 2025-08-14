@@ -14,7 +14,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+TAILWIND_APP_NAME = "theme"
+
+DATE_INPUT_FORMATS = ['%d/%m/%Y']
 
 # Application definition
 
@@ -43,6 +46,10 @@ INSTALLED_APPS = [
     "allauth.account",
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    # COTTON
+    'django_cotton',
+    'tailwind',
+    'theme',
 ]
 
 MIDDLEWARE = [
@@ -57,12 +64,23 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
+if DEBUG:
+    # Add django_browser_reload only in DEBUG mode
+    INSTALLED_APPS += ['django_browser_reload']
+    # Add django_browser_reload middleware only in DEBUG mode
+    MIDDLEWARE += [
+        "django_browser_reload.middleware.BrowserReloadMiddleware",
+    ]
+
+
 ROOT_URLCONF = "app.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        # "DIRS": [
+        #     BASE_DIR / "templates"
+        # ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -75,7 +93,7 @@ TEMPLATES = [
     },
 ]
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]
 ACCOUNT_LOGIN_METHODS = ["email"]
 ACCOUNT_EMAIL_VERIFICATION = "none"
@@ -84,9 +102,9 @@ AUTH_USER_MODEL = "turnero.User"
 
 LOGIN_REDIRECT_URL = "/"
 
-# ACCOUNT_FORMS = {
-#         "signup": "turnero.forms.UserSignUpForm",
-# }
+ACCOUNT_FORMS = {
+        "signup": "turnero.forms.PacienteSignUpForm",
+}
 
 ACCOUNT_ADAPTER = "turnero.adapters.UserAccountAdapter"
 

@@ -29,7 +29,7 @@ class User(AbstractUser):
     fecha_nac = models.DateField()
     fecha_creado = models.DateField(auto_now_add=True)
 
-    objets = UserManager()
+    objects = UserManager()
     REQUIRED_FIELDS = ["email", "dni", "fecha_nac", "rol"]
 
 
