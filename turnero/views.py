@@ -2,7 +2,7 @@ import logging
 import json
 from django.http import HttpResponse
 from django.shortcuts import render
-from .forms import PacienteSignUpForm
+from .forms import PacienteSignUpForm, DoctorSignUpForm
 from allauth.account.views import SignupView
 from .models import ObraSocial
 
@@ -26,6 +26,10 @@ def doctores(request):
 
 def pacientes(request):
     return HttpResponse(b"hola, esto es la pagina de pacientes")
+
+class DoctorSignupView(SignupView):
+    template_name = "account/signup_doctores.html"
+    form_class = DoctorSignUpForm
 
 class PacienteSignupView(SignupView):
     template_name = "account/signup_pacientes.html"

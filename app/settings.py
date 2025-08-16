@@ -107,10 +107,10 @@ AUTH_USER_MODEL = "turnero.User"
 
 LOGIN_REDIRECT_URL = "/"
 
-ACCOUNT_FORMS = {
-        "signup": "turnero.forms.PacienteSignUpForm",
-}
-
+# ACCOUNT_FORMS = {
+#         "signup": "turnero.forms.PacienteSignUpForm",
+# }
+#
 ACCOUNT_ADAPTER = "turnero.adapters.UserAccountAdapter"
 
 AUTHENTICATION_BACKENDS = [
