@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>URL Index</title>
+</head>
+
+<body>
+  <h1>Project URLs</h1>
+  <ul>
+    {% for p in patterns %}
+    <li>
+      <strong>{{ p.pattern }}</strong>
+      {% if p.name %} (name: {{ p.name }}){% endif %}
+      {% if p.callback %}<br><small>{{ p.callback }}</small>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</body>
+
+</html>

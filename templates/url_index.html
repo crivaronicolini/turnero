@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL Index</title>
+  <style>
+    body { font-family: sans-serif; }
+    ul { line-height: 1.6; }
+    li { margin-bottom: 8px; }
+    small { color: #555; }
+  </style>
+</head>
+<body>
+  <h1>Project URLs</h1>
+  <ul>
+    {% for p in patterns %}
+      <li>
+        {% if "<" in p.pattern %}
+          <strong>{{ p.pattern }}</strong>
+        {% else %}
+          <a href="/{{ p.pattern|cut:'^'|cut:'$' }}"><strong>{{ p.pattern }}</strong></a>
+        {% endif %}
+
+        {% if p.name %} (name: {{ p.name }}){% endif %}
+        {% if p.callback %}<br><small>{{ p.callback }}</small>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

@@ -6,6 +6,7 @@ from .forms import PacienteSignUpForm
 from allauth.account.views import SignupView
 from .models import ObraSocial
 
+
 # Temporary basic config for debugging
 logging.basicConfig(
     level=logging.INFO,
