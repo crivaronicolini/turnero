@@ -4,6 +4,8 @@ from .models import Especialidad, ObraSocial, Plan
 
 
 class PacienteSignUpForm(SignupForm):
+    nombre = forms.CharField(label="Nombre", max_length=255)
+    apellidos = forms.CharField(label="Apellidos", max_length=255)
     dni = forms.CharField(label="DNI", max_length=20)
     fecha_nac = forms.DateField(label="Fecha de nacimiento")
     nro_afiliado = forms.CharField(label="Nro. de afiliado", max_length=20)

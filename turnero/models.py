@@ -26,6 +26,8 @@ class User(AbstractUser):
     )
 
     dni = models.CharField(max_length=20, unique=True)
+    nombre = models.CharField(max_length=255)
+    apellidos = models.CharField(max_length=255)
     fecha_nac = models.DateField()
     fecha_creado = models.DateField(auto_now_add=True)
 
