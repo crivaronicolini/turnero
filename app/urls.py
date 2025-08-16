@@ -17,10 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
+import turnero.views as views
 
 urlpatterns = [
     path('', include("turnero.urls")),
     path('admin/', admin.site.urls),
+    # hay que ocultar accounts/signup con nuestro template
+    path("accounts/signup/", views.PacienteSignupView.as_view(), name="pacientes_signup"),
     path('accounts/', include('allauth.urls')),
 ]
 

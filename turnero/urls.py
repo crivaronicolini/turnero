@@ -6,8 +6,10 @@ import turnero.views as views
 urlpatterns = [
     path("", views.index, name="index"),
 
+    path("turnos/", views.turnos),
+
     path("pacientes/", views.pacientes),
-    path("pacientes/signup", views.paciente_registro_view, name="pacientes_signup"),
+    path("pacientes/signup", views.PacienteSignupView.as_view(), name="pacientes_signup"),
 
     path("doctores/", views.doctores),
     path("doctores/signup", SignupView.as_view(form_class=DoctorSignUpForm), name="doctores_signup"),

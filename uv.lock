@@ -294,6 +294,19 @@ socialaccount = [
 ]
 
 [[package]]
+name = "django-allauth-ui"
+version = "1.8.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django-widget-tweaks" },
+    { name = "slippers" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/40/38/1b3abb5b4a8d94b558f70e7700b8200881e605e3bc2758b29ea7b6df644b/django_allauth_ui-1.8.1.tar.gz", hash = "sha256:5b3b607e2784fd9f861ffe5f467e0de1d18e7f92ae7047da8f26c02abb3d6a36", size = 42612, upload-time = "2025-05-28T18:58:18.617Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/be/9b/4a0972599e807c0da4f9a869dc3705b3fa3a2be240b143d9e76a7e240fc0/django_allauth_ui-1.8.1-py3-none-any.whl", hash = "sha256:306d0ebe013181a1972b6e1d2ecaf911e95e247dfb1df50d05a794cad7dca84e", size = 68885, upload-time = "2025-05-28T18:58:16.881Z" },
+]
+
+[[package]]
 name = "django-browser-reload"
 version = "1.18.0"
 source = { registry = "https://pypi.org/simple" }
@@ -333,6 +346,15 @@ wheels = [
 [package.optional-dependencies]
 reload = [
     { name = "django-browser-reload" },
+]
+
+[[package]]
+name = "django-widget-tweaks"
+version = "1.5.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a5/fe/26eb92fba83844e71bbec0ced7fc2e843e5990020e3cc676925204031654/django-widget-tweaks-1.5.0.tar.gz", hash = "sha256:1c2180681ebb994e922c754804c7ffebbe1245014777ac47897a81f57cc629c7", size = 14767, upload-time = "2023-08-25T15:29:12.778Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/46/6a/6cb6deb5c38b785c77c3ba66f53051eada49205979c407323eb666930915/django_widget_tweaks-1.5.0-py3-none-any.whl", hash = "sha256:a41b7b2f05bd44d673d11ebd6c09a96f1d013ee98121cb98c384fe84e33b881e", size = 8960, upload-time = "2023-08-25T15:29:05.644Z" },
 ]
 
 [[package]]
@@ -594,6 +616,21 @@ wheels = [
 ]
 
 [[package]]
+name = "slippers"
+version = "0.6.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+    { name = "pyyaml" },
+    { name = "typeguard" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a7/c6/6af4500f31e53e9f782d264cb715f1a8cc9ac4248fba9fe2fe172822ea79/slippers-0.6.2.tar.gz", hash = "sha256:4cb555b8822ba0d404e5405723f5d723994022c29046008ee917081031bc0cf1", size = 59499, upload-time = "2023-08-01T05:04:18.964Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d5/8c/1fe2803870861f9a7f0cf502e4d1361dbb3685997118f4f76fd83ec9272f/slippers-0.6.2-py3-none-any.whl", hash = "sha256:739e05f85354becbf0a65daab831eea62557d89e7512042209ab629af4378bca", size = 61359, upload-time = "2023-08-01T05:04:17.378Z" },
+]
+
+[[package]]
 name = "sqlparse"
 version = "0.5.3"
 source = { registry = "https://pypi.org/simple" }
@@ -619,9 +656,12 @@ dependencies = [
     { name = "cookiecutter" },
     { name = "django" },
     { name = "django-allauth", extra = ["socialaccount"] },
+    { name = "django-allauth-ui" },
     { name = "django-cotton" },
     { name = "django-tailwind" },
+    { name = "django-widget-tweaks" },
     { name = "honcho" },
+    { name = "slippers" },
 ]
 
 [package.dev-dependencies]
@@ -634,13 +674,25 @@ requires-dist = [
     { name = "cookiecutter", specifier = ">=2.6.0" },
     { name = "django", specifier = ">=5.2.4" },
     { name = "django-allauth", extras = ["google", "socialaccount"], specifier = ">=65.10.0" },
+    { name = "django-allauth-ui", specifier = ">=1.8.1" },
     { name = "django-cotton", specifier = ">=2.1.3" },
     { name = "django-tailwind", specifier = ">=4.2.0" },
+    { name = "django-widget-tweaks", specifier = ">=1.5.0" },
     { name = "honcho", specifier = ">=2.0.0" },
+    { name = "slippers", specifier = ">=0.6.2" },
 ]
 
 [package.metadata.requires-dev]
 dev = [{ name = "django-tailwind", extras = ["reload"], specifier = ">=4.2.0" }]
+
+[[package]]
+name = "typeguard"
+version = "2.13.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/3a/38/c61bfcf62a7b572b5e9363a802ff92559cb427ee963048e1442e3aef7490/typeguard-2.13.3.tar.gz", hash = "sha256:00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4", size = 40604, upload-time = "2021-12-10T21:09:39.158Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9a/bb/d43e5c75054e53efce310e79d63df0ac3f25e34c926be5dffb7d283fb2a8/typeguard-2.13.3-py3-none-any.whl", hash = "sha256:5e3e3be01e887e7eafae5af63d1f36c849aaa94e3a0112097312aabfa16284f1", size = 17605, upload-time = "2021-12-10T21:09:37.844Z" },
+]
 
 [[package]]
 name = "types-python-dateutil"

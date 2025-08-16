@@ -46,6 +46,9 @@ class Plan(models.Model):
         ObraSocial, on_delete=models.CASCADE, related_name="planes"
     )
 
+    def __str__(self):
+        return self.nombre
+
     class Meta:
         constraints = [
             # un paciente no puede tener varias obras sociales

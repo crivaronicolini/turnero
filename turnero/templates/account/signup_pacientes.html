@@ -1,0 +1,40 @@
+{% extends "account/signup.html" %}
+{% load i18n %}
+{% load allauth_ui %}
+{% load widget_tweaks %}
+{% block content %}
+    {% trans "Sign Up" as heading %}
+    {% blocktranslate asvar subheading %}aasdasdsdsada Already have an account? Then please <a href="{{ login_url }}" class="link">sign in</a>.{% endblocktranslate %}
+    {% #container heading=heading subheading=subheading  %}
+    {% if not SOCIALACCOUNT_ONLY %}
+        {% url 'pacientes_signup' as action_url %}
+        {% #form form=form url=action_url button_text=heading %}
+        {{ redirect_field }}
+        {% csrf_token %}
+        {% /form %}
+    {% endif %}
+    {% /container %}
+{% endblock %}
+
+{% block script %}
+<script>
+  const obraPlanesMap = {{ obra_social_planes_json|safe }};
+  const obraSelect = document.getElementById("obra_social");
+  const planSelect = document.getElementById("plan");
+  planSelect.innerHTML = "";
+
+  obraSelect.addEventListener("change", function() {
+    const selectedObraId = this.value;
+    planSelect.innerHTML = "";
+
+    if (obraPlanesMap[selectedObraId]) {
+      obraPlanesMap[selectedObraId].forEach(plan => {
+        const opt = document.createElement("option");
+        opt.value = plan.id;
+        opt.textContent = plan.nombre;
+        planSelect.appendChild(opt);
+      });
+    }
+  });
+</script>
+{% endblock script %}

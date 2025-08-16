@@ -31,6 +31,8 @@ TAILWIND_APP_NAME = "theme"
 
 DATE_INPUT_FORMATS = ['%d/%m/%Y']
 
+ALLAUTH_UI_THEME = "dark"
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,10 +44,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "turnero",
     # ALLAUTH
+    "allauth_ui",
     "allauth",
     "allauth.account",
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    "widget_tweaks",
+    "slippers",
     # COTTON
     'django_cotton',
     'tailwind',
@@ -78,9 +83,9 @@ ROOT_URLCONF = "app.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        # "DIRS": [
-        #     BASE_DIR / "templates"
-        # ],
+        "DIRS": [
+            BASE_DIR / "templates"
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -153,7 +158,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'email',
         ],
         'AUTH_PARAMS': {
-            'access_type': 'offline',
+            'access_type': 'online',
         },
         'OAUTH_PKCE_ENABLED': True,
     }

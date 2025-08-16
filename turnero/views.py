@@ -1,10 +1,10 @@
 import logging
+import json
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.shortcuts import render
 from .forms import PacienteSignUpForm
-from .utils import get_planes_por_obra_social
-from allauth.account.adapter import get_adapter
+from allauth.account.views import SignupView
+from .models import ObraSocial
 
 # Temporary basic config for debugging
 logging.basicConfig(
@@ -17,42 +17,27 @@ logger = logging.getLogger(__name__)
 def index(request):
     return HttpResponse(b"hola, esto es el index")
 
+def turnos(request):
+    return HttpResponse(b"hola, esto es la pagina de turnos")
+
 def doctores(request):
     return HttpResponse(b"hola, esto es la pagina de doctores")
 
 def pacientes(request):
     return HttpResponse(b"hola, esto es la pagina de pacientes")
 
-def paciente_registro_view(request):
-    if request.method == 'POST':
-        logger.info(f"Received POST request to paciente_registro_view: {request.POST}")
-        form = PacienteSignUpForm(request.POST)
-        if form.is_valid():
-            # try:
-            logger.info(f"Form is valid. Cleaned data: {form.cleaned_data}")
-            user = form.save(request)
-            user.backend = 'allauth.account.auth_backends.AuthenticationBackend'
-            login(request, user)
-            logger.info(f"User {user.email} created and logged in. Redirecting.")
-            return redirect(get_adapter(request).get_signup_redirect_url(request))
-            # except IntegrityError as e:
-            #     logger.error(f"IntegrityError during user save: {e}")
-            #     form.add_error(None, "A user with this username or email may already exist, or another database error occurred.")
-        else:
-            logger.warning("Form is invalid.")
-            logger.warning(f"Form errors: {form.errors.as_json()}")
-    else:
-        logger.info("Received GET request to paciente_registro_view")
-        form = PacienteSignUpForm()
+class PacienteSignupView(SignupView):
+    template_name = "account/signup_pacientes.html"
+    form_class = PacienteSignUpForm
 
-    obras_sociales_data, planes_por_obra_social = get_planes_por_obra_social()
-
-    context = {
-        'form': form,
-        'obras_sociales_data': obras_sociales_data,
-        'planes_data': dict(planes_por_obra_social),
-    }
-    return render(request, 'signup_pacientes.html', context)
+    def get_context_data(self, form=None):
+        context = super().get_context_data()
+        mapping = {
+            obra_social.id: list(obra_social.planes.values("id", "nombre"))
+            for obra_social in ObraSocial.objects.all()
+        }
+        context["obra_social_planes_json"] = json.dumps(mapping)
+        return context
 
 def secretaria(request):
     return HttpResponse(b"hola, esto es la pagina de secretaria")

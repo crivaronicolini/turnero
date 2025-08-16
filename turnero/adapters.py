@@ -1,7 +1,7 @@
 import logging
 from allauth.account.adapter import DefaultAccountAdapter
 from django.db import transaction
-from .models import Paciente, Doctor, Secretario, User, Doctor_especialidad, Plan
+from .models import Paciente, Doctor, Secretario, User, Doctor_especialidad
 from .forms import PacienteSignUpForm, DoctorSignUpForm, SecretarioSignUpForm
 
 # Temporary basic config for debugging
@@ -33,8 +33,7 @@ class UserAccountAdapter(DefaultAccountAdapter):
                 user.save()
 
                 if user.rol == User.Roles.ROL_PACIENTE:
-                    plan_id = form.cleaned_data.get("plan")
-                    plan_instance = Plan.objects.get(id = plan_id)
+                    plan_instance = form.cleaned_data.get("plan")
                     Paciente.objects.create(
                         user=user,
                         nro_afiliado=form.cleaned_data["nro_afiliado"],
