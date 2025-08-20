@@ -7,6 +7,7 @@ admin.site.register(Doctor)
 admin.site.register(Paciente)
 admin.site.register(Secretario)
 
+
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     fieldsets = BaseUserAdmin.fieldsets + (

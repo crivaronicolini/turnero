@@ -1,0 +1,72 @@
+<div x-data="{
+    allOptions: {{ choices }},
+    options: [],
+    selectedOptions: {{ selected_json }},
+    isOpen: false,
+
+    toggleOption(option) {
+      let idx = this.selectedOptions.findIndex(o => o.value === option.value);
+      if (idx === -1) {
+        this.selectedOptions.push(option);
+      } else {
+        this.selectedOptions.splice(idx, 1);
+      }
+    },
+    isSelected(option) {
+      return this.selectedOptions.some(o => o.value === option.value);
+    },
+    removeOption(option) {
+      this.selectedOptions = this.selectedOptions.filter(o => o.value !== option.value);
+    },
+    getFilteredOptions(query) {
+      this.options = this.allOptions.filter((option) =>
+        option.label.toLowerCase().includes(query.toLowerCase()),
+      )
+    },
+  }" x-init="options = allOptions" class="form-control w-full max-w-md">
+
+  <!-- Trigger box (grows with badges) -->
+  <div class="border border-neutral-600 rounded-lg p-2 flex flex-wrap gap-1 cursor-pointer min-h-[2.5rem]"
+    @click="isOpen = !isOpen">
+    <template x-if="selectedOptions.length === 0">
+      <span class="text-sm text-gray-400">{{ widget.attrs.placeholder }}</span>
+    </template>
+
+    <!-- Pills -->
+    <template x-for="(sel, i) in selectedOptions" :key="sel.value">
+      <span class="badge badge-primary gap-1">
+        <span x-text="sel.label"></span>
+        <button type="button" @click.stop="removeOption(sel)">✕</button>
+      </span>
+    </template>
+  </div>
+
+  <!-- Dropdown -->
+  <div x-show="isOpen"
+    class="dropdown-content flex flex-col gap-2 p-2 shadow bg-base-100 rounded-box w-full max-h-72 overflow-y-auto mt-1 border"
+    x-transition @click.outside="isOpen = false">
+    <!-- Search -->
+    <input type="text" class="flex-grow bg-transparent border border-neutral-600 rounded-lg h-12 px-4"
+      placeholder="Buscar..." @input="getFilteredOptions($event.target.value)" />
+
+    <!-- Options -->
+    <ul class="menu menu-compact flex flex-col w-full">
+      <template x-for="opt in options" :key="opt.value">
+        <li class="w-full">
+          <a href="javascript:void(0)" @click="toggleOption(opt)" class="flex justify-between w-full">
+            <span x-text="opt.label"></span>
+            <span x-show="isSelected(opt)">✔</span>
+          </a>
+        </li>
+      </template>
+      <li x-show="options.length === 0" class="w-full">
+        <span class="text-gray-400 text-sm">No hay resultados</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Hidden inputs for form -->
+  <template x-for="sel in selectedOptions" :key="'hidden-'+sel.value">
+    <input type="hidden" name="{{widget.name}}" :value="sel.value">
+  </template>
+</div>

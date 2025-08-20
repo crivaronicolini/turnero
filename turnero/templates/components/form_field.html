@@ -5,7 +5,7 @@
 {% if field.errors %}
     {% render_field field placeholder="" class="w-full input input-bordered text-primary input-error" %}
 {% else %}
-{% render_field field placeholder="" id=field.name class="w-full input input-bordered text-primary" %}
+{% render_field field id=field.name class="w-full input input-bordered text-primary" %}
 {% endif %}
 {% for error in field.errors %}
     <span class="flex items-center max-w-xs mt-1 ml-1 text-xs font-medium tracking-wide text-error">{{ error }}</span>

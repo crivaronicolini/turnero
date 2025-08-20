@@ -11,6 +11,7 @@ class Sede(models.Model):
     horarios = models.CharField(max_length=255)
     telefono = models.CharField(max_length=20)
 
+
 class User(AbstractUser):
     class Roles(models.TextChoices):
         ROL_PACIENTE = "PA", "Paciente"

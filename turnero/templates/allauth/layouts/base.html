@@ -2,11 +2,15 @@
 {% load i18n %}
 {% load static %}
 {% load allauth_ui %}
+{% load tailwind_tags %}
 <!DOCTYPE html>
 <html data-theme="{% allauth_ui_theme %}">
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        {% tailwind_css %}
         <title>
             {% block head_title %}
             {% endblock head_title %}

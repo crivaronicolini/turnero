@@ -14,17 +14,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 import turnero.views as views
 
 urlpatterns = [
-    path('', include("turnero.urls")),
-    path('admin/', admin.site.urls),
+    path("", include("turnero.urls")),
+    path("admin/", admin.site.urls),
     # hay que ocultar accounts/signup con nuestro template
-    path("accounts/signup/", views.PacienteSignupView.as_view(), name="pacientes_signup"),
-    path('accounts/', include('allauth.urls')),
+    path(
+        "accounts/signup/", views.PacienteSignupView.as_view(), name="pacientes_signup"
+    ),
+    path("accounts/", include("allauth.urls")),
 ]
 
 if settings.DEBUG:

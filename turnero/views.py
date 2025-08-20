@@ -9,27 +9,33 @@ from .models import ObraSocial
 
 # Temporary basic config for debugging
 logging.basicConfig(
-    level=logging.INFO,
-    format='[%(levelname)s] %(name)s (%(filename)s:%(lineno)d): %(message)s'
+    level=logging.DEBUG,
+    format="[%(levelname)s] %(name)s (%(filename)s:%(lineno)d): %(message)s",
 )
 
 logger = logging.getLogger(__name__)
 
+
 def index(request):
     return HttpResponse(b"hola, esto es el index")
+
 
 def turnos(request):
     return HttpResponse(b"hola, esto es la pagina de turnos")
 
+
 def doctores(request):
     return HttpResponse(b"hola, esto es la pagina de doctores")
+
 
 def pacientes(request):
     return HttpResponse(b"hola, esto es la pagina de pacientes")
 
+
 class DoctorSignupView(SignupView):
     template_name = "account/signup_doctores.html"
     form_class = DoctorSignUpForm
+
 
 class PacienteSignupView(SignupView):
     template_name = "account/signup_pacientes.html"
@@ -44,8 +50,10 @@ class PacienteSignupView(SignupView):
         context["obra_social_planes_json"] = json.dumps(mapping)
         return context
 
+
 def secretaria(request):
     return HttpResponse(b"hola, esto es la pagina de secretaria")
+
 
 def aber(request):
     return render(request, "dashboard.html")

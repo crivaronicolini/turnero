@@ -7,7 +7,7 @@ from .forms import PacienteSignUpForm, DoctorSignUpForm, SecretarioSignUpForm
 # Temporary basic config for debugging
 logging.basicConfig(
     level=logging.INFO,
-    format='[%(levelname)s] %(name)s (%(filename)s:%(lineno)d): %(message)s'
+    format="[%(levelname)s] %(name)s (%(filename)s:%(lineno)d): %(message)s",
 )
 
 logger = logging.getLogger(__name__)
@@ -47,8 +47,7 @@ class UserAccountAdapter(DefaultAccountAdapter):
 
                     for esp in form.cleaned_data["especialidades"]:
                         Doctor_especialidad.objects.create(
-                            id_doctor = doctor,
-                            id_especialidad = esp
+                            id_doctor=doctor, id_especialidad=esp
                         )
 
                 elif user.rol == User.Roles.ROL_SECTRETARIO:
