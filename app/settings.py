@@ -29,9 +29,9 @@ ALLOWED_HOSTS = []
 
 TAILWIND_APP_NAME = "theme"
 
-DATE_INPUT_FORMATS = ['%d/%m/%Y']
+DATE_INPUT_FORMATS = ["%d/%m/%Y"]
 
-ALLAUTH_UI_THEME = "dark"
+ALLAUTH_UI_THEME = "light"
 
 # Application definition
 
@@ -47,14 +47,14 @@ INSTALLED_APPS = [
     "allauth_ui",
     "allauth",
     "allauth.account",
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
     "widget_tweaks",
     "slippers",
     # COTTON
-    'django_cotton',
-    'tailwind',
-    'theme',
+    "django_cotton",
+    "tailwind",
+    "theme",
 ]
 
 MIDDLEWARE = [
@@ -71,7 +71,7 @@ MIDDLEWARE = [
 
 if DEBUG:
     # Add django_browser_reload only in DEBUG mode
-    INSTALLED_APPS += ['django_browser_reload']
+    INSTALLED_APPS += ["django_browser_reload"]
     # Add django_browser_reload middleware only in DEBUG mode
     MIDDLEWARE += [
         "django_browser_reload.middleware.BrowserReloadMiddleware",
@@ -83,9 +83,7 @@ ROOT_URLCONF = "app.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            BASE_DIR / "templates"
-        ],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -153,15 +151,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # ALLAUTH SOCIAL
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
+        "AUTH_PARAMS": {
+            "access_type": "online",
         },
-        'OAUTH_PKCE_ENABLED': True,
+        "OAUTH_PKCE_ENABLED": True,
     }
 }
 

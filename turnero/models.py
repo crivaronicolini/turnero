@@ -11,6 +11,9 @@ class Sede(models.Model):
     horarios = models.CharField(max_length=255)
     telefono = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.nombre
+
 
 class User(AbstractUser):
     class Roles(models.TextChoices):
@@ -34,6 +37,9 @@ class User(AbstractUser):
 
     objects = UserManager()
     REQUIRED_FIELDS = ["email", "dni", "fecha_nac", "rol"]
+
+    def __str__(self):
+        return f"{self.nombre}, {self.apellidos} - dni: {self.dni}"
 
 
 class ObraSocial(models.Model):
@@ -67,10 +73,16 @@ class Paciente(models.Model):
     nro_afiliado = models.CharField(max_length=20)
     plan = models.ForeignKey(Plan, on_delete=models.PROTECT, related_name="pacientes")
 
+    def __str__(self):
+        return f"{self.user}"
+
 
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     matricula = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f"{self.user} - {self.matricula}"
 
 
 class Especialidad(models.Model):
@@ -88,6 +100,9 @@ class Doctor_especialidad(models.Model):
         Especialidad, on_delete=models.CASCADE, related_name="especialidad_doctor"
     )
 
+    def __str__(self):
+        return f"{self.id_doctor} - {self.id_especialidad}"
+
 
 class Secretario(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -102,15 +117,19 @@ class Turno(models.Model):
         Doctor, on_delete=models.CASCADE, related_name="turnos_por_doctor"
     )
     id_paciente = models.ForeignKey(
-        Paciente, on_delete=models.CASCADE, related_name="turnos_por_paciente"
+        Paciente,
+        on_delete=models.CASCADE,
+        related_name="turnos_por_paciente",
+        null=True,
+        blank=True,
     )
     id_especialidad = models.ForeignKey(
         Especialidad, on_delete=models.CASCADE, related_name="turnos_por_especialidad"
     )
-    horario = models.DateTimeField()
-    modalidad = models.CharField(
-        max_length=20, choices={"prescencial": "Prescencial", "online": "Online"}
-    )
+    fecha = models.DateTimeField()
+
+    duracion = models.IntegerField()
+
     estado = models.CharField(
         max_length=50,
         choices={
@@ -127,7 +146,7 @@ class Turno(models.Model):
         constraints = [
             # un doctor no puede tener varios turnos en el mismo horario
             models.UniqueConstraint(
-                fields=["id_doctor", "horario", "id_sede"],
+                fields=["id_doctor", "fecha", "id_sede"],
                 name="unique_doctor_horario_turnos",
             )
         ]

@@ -12,6 +12,7 @@ urlpatterns = [
     ),
     path("doctores/", views.doctores),
     path("doctores/signup", views.DoctorSignupView.as_view(), name="doctores_signup"),
+    path("doctores/turnos", views.doctores_turnos, name="doctores_turnos"),
     path("secretaria/", views.secretaria),
     path(
         "secretaria/signup",

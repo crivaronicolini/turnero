@@ -1,0 +1,152 @@
+<div :id="$id('{{ id }}')" x-data="{
+            startDate: null,
+            endDate: null,
+            currentMonth: new Date().getMonth(),
+            currentYear: new Date().getFullYear(),
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octobre', 'Noviembre', 'Deciembre'],
+            dayNames: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab' ],
+            daysInMonth: [],
+            blankDays: [],
+
+            selectDate(day) {
+              const selectedDate = new Date(this.currentYear, this.currentMonth, day);
+
+              if (!this.startDate || (this.startDate && this.endDate)) {
+                // Start new selection
+                this.startDate = selectedDate;
+                this.endDate = null;
+              } else if (this.startDate && !this.endDate) {
+                // Set end date
+                if (selectedDate >= this.startDate) {
+                  this.endDate = selectedDate;
+                } else {
+                  // If selected date is before start date, make it the new start date
+                  this.endDate = this.startDate;
+                  this.startDate = selectedDate;
+                }
+              }
+            },
+
+            isInRange(day) {
+              if (!this.startDate || !this.endDate) return false;
+              const date = new Date(this.currentYear, this.currentMonth, day);
+              return date >= this.startDate && date <= this.endDate;
+            },
+
+            isStartDate(day) {
+              if (!this.startDate) return false;
+              const date = new Date(this.currentYear, this.currentMonth, day);
+              return date.getTime() === this.startDate.getTime();
+            },
+
+            isEndDate(day) {
+              if (!this.endDate) return false;
+              const date = new Date(this.currentYear, this.currentMonth, day);
+              return date.getTime() === this.endDate.getTime();
+            },
+
+            isToday(day) {
+              const today = new Date();
+              const date = new Date(this.currentYear, this.currentMonth, day);
+              return today.toDateString() === date.toDateString();
+            },
+
+            previousMonth() {
+              if (this.currentMonth === 0) {
+                this.currentMonth = 11;
+                this.currentYear--;
+              } else {
+                this.currentMonth--;
+              }
+              this.calculateDays();
+            },
+
+            nextMonth() {
+              if (this.currentMonth === 11) {
+                this.currentMonth = 0;
+                this.currentYear++;
+              } else {
+                this.currentMonth++;
+              }
+              this.calculateDays();
+            },
+
+            calculateDays() {
+              const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+              const firstDayOfWeek = new Date(this.currentYear, this.currentMonth, 1).getDay();
+
+              this.blankDays = Array.from({ length: firstDayOfWeek }, (_, i) => i);
+              this.daysInMonth = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+            },
+
+            getDateRange() {
+              if (!this.startDate || !this.endDate) { return null };
+              return {
+                startDate: this.startDate ? this.startDate : null,
+                endDate: this.endDate ? this.endDate : null
+              }
+            },
+
+            formatDate(date) {
+              if (!date) return '';
+              return date.toLocaleDateString('es-AR', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+              });
+            }
+          }" x-init="calculateDays()" class="card bg-white shadow p-6 border border-gray-200">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <span x-text="monthNames[currentMonth]" class="text-lg font-bold text-gray-800"></span>
+      <span x-text="currentYear" class="ml-1 text-lg font-normal text-gray-600"></span>
+    </div>
+    <div class="flex space-x-1">
+      <button type="button" x-on:click="previousMonth()" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+        <svg class="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button type="button" x-on:click="nextMonth()" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+        <svg class="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-7 mb-2">
+    <template x-for="day in dayNames">
+      <div class="p-2 text-center">
+        <span x-text="day" class="text-xs font-medium text-gray-500"></span>
+      </div>
+    </template>
+  </div>
+
+  <div class="grid grid-cols-7 gap-1">
+    <template x-for="blank in blankDays">
+      <div class="p-2"></div>
+    </template>
+
+    <template x-for="day in daysInMonth">
+      <div class="relative">
+        <button type="button" x-on:click="selectDate(day)" x-text="day" x-bind:class="{
+                    'bg-purple-300 text-black': isStartDate(day) || isEndDate(day),
+                    'bg-purple-100': isInRange(day) && !isStartDate(day) && !isEndDate(day),
+                    'bg-gray-100': isToday(day) && !isInRange(day) && !isStartDate(day) && !isEndDate(day),
+                    'hover:bg-gray-50': !isInRange(day) && !isStartDate(day) && !isEndDate(day)
+                  }"
+          class="w-full h-10 text-sm rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1"></button>
+      </div>
+    </template>
+  </div>
+
+  <div class="mt-6 p-4 bg-gray-50 rounded-md">
+    <div class="text-sm text-gray-600 mb-2">Rango seleccionado:</div>
+    <div class="flex items-center space-x-2 text-sm">
+      <span x-text="formatDate(startDate) || 'Fecha inicio'" class="font-medium"></span>
+      <span class="text-gray-400">→</span>
+      <span x-text="formatDate(endDate) || 'Fecha final'" class="font-medium"></span>
+    </div>
+  </div>
+</div>
