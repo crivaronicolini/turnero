@@ -21,7 +21,7 @@ from django.conf import settings
 import turnero.views as views
 
 urlpatterns = [
-    path("", include("turnero.urls")),
+    path("", include("turnero.urls", namespace="turnero")),
     path("admin/", admin.site.urls),
     # hay que ocultar accounts/signup con nuestro template
     path(
