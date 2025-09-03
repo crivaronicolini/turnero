@@ -17,6 +17,7 @@
     }
   </style>
   <script src="https://unpkg.com/alpinejs" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
   {% tailwind_css %}
   <title>
     {% block head_title %}
@@ -26,10 +27,10 @@
   {% endblock extra_head %}
 </head>
 
-<body class="p-8">
+<body class="p-8" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
   <div>
     {% block body %}
-      <div class="navbar bg-base-100 shadow-sm">
+      <div class="navbar bg-base-100 shadow-sm mb-8">
         <div class="flex-1">
           <a class="btn btn-ghost text-xl">Centro de salud papita</a>
         </div>

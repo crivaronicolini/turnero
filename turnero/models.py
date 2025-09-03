@@ -41,6 +41,9 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.nombre}, {self.apellidos} - dni: {self.dni}"
 
+    def get_full_name(self):
+        return f"{self.nombre} {self.apellidos}".strip()
+
 
 class ObraSocial(models.Model):
     nombre = models.CharField(max_length=100, unique=True)

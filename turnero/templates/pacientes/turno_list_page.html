@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% load cotton %}
+
+{% block content %}
+<div class="container mx-auto mt-8 p-4">
+    <h1 class="text-3xl font-bold mb-6">Turnos Disponibles</h1>
+
+    <!-- Filter Form -->
+    <form id="filters" hx-get="{% url 'turnero:turno_list_view' %}" hx-target="#turnos-list-container" hx-swap="innerHTML" class="bg-base-200 p-4 rounded-lg mb-8 flex flex-wrap items-end gap-4">
+        
+        <!-- Sede Filter -->
+        <div>
+            <label for="sede-filter" class="label">Sede</label>
+            <select id="sede-filter" name="sede" class="select select-bordered w-full max-w-xs">
+                <option value="">Todas</option>
+                {% for sede in sedes %}
+                    <option value="{{ sede.id }}" {% if sede.id|stringformat:"s" == selected_sede %}selected{% endif %}>{{ sede.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Especialidad Filter -->
+        <div>
+            <label for="especialidad-filter" class="label">Especialidad</label>
+            <select id="especialidad-filter" name="especialidad" class="select select-bordered w-full max-w-xs">
+                <option value="">Todas</option>
+                {% for especialidad in especialidades %}
+                    <option value="{{ especialidad.id }}" {% if especialidad.id|stringformat:"s" == selected_especialidad %}selected{% endif %}>{{ especialidad.especialidad }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Doctor Filter -->
+        <div>
+            <label for="doctor-filter" class="label">Profesional</label>
+            <c-selectsearch name="doctor" :items_source="doctores_json" placeholder="Todos" :selected_value="selected_doctor">
+            </c-selectsearch>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <span id="loading-indicator" class="htmx-indicator">Cargando...</span>
+    </form>
+
+    <!-- Results Container -->
+    <div id="turnos-list-container">
+        {# The initial list is rendered here, and HTMX will swap this div's content #}
+        {% include "pacientes/partials/lista_turnos.html" %}
+    </div>
+
+</div>
+{% endblock %}

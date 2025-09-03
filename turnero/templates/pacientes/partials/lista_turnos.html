@@ -1,0 +1,47 @@
+{# This partial template renders the list of appointments and the pagination controls #}
+
+<div class="space-y-4">
+    {% for turno in page_obj %}
+        <div class="card bg-base-100 shadow-md border-l-4 border-primary">
+            <div class="card-body p-4 flex-row justify-between items-center">
+                <div>
+                    <p class="font-bold text-lg">{{ turno.fecha|date:"l, d F Y" }} - {{ turno.fecha|date:"H:i" }}hs</p>
+                    <p class="text-gray-600">Dr. {{ turno.id_doctor.user.get_full_name }}</p>
+                    <p class="text-gray-600">{{ turno.id_especialidad.especialidad }}</p>
+                    <p class="text-sm text-gray-500">{{ turno.id_sede.nombre }}</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn btn-primary"
+                            hx-get="{% url 'turnero:revisar_turno' %}?turno_id={{ turno.id }}"
+                            hx-target="#turnos-list-container"
+                            hx-push-url="true">
+                        Reservar
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-info">
+            <span>No se encontraron turnos disponibles con los filtros seleccionados.</span>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+<div class="join mt-8 flex justify-center">
+    {% if page_obj.has_previous %}
+        <div 
+           hx-get="{% querystring page=page_obj.previous_page_number %}"
+           hx-target="#turnos-list-container" 
+           class="join-item btn">«</div>
+    {% endif %}
+
+    <button class="join-item btn">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</button>
+
+    {% if page_obj.has_next %}
+        <div 
+           hx-get="{% querystring page=page_obj.next_page_number %}"
+           hx-target="#turnos-list-container" 
+           class="join-item btn">»</div>
+    {% endif %}
+</div>

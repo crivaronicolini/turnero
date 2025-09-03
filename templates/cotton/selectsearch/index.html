@@ -1,0 +1,76 @@
+<div x-data="{
+        allOptions: {{ items_source|default:'[]' }},
+        options: [],
+        isOpen: false,
+        openedWithKeyboard: false,
+        selectedOption: null,
+        setSelectedOption(option) {
+            if (this.selectedOption && this.selectedOption.value === option.value) {
+                this.selectedOption = null;
+            } else {
+                this.selectedOption = option;
+            }
+            this.isOpen = false;
+            this.openedWithKeyboard = false;
+            this.$refs.hiddenTextField.value = this.selectedOption ? this.selectedOption.value : '';
+            this.$refs.hiddenTextField.dispatchEvent(new Event('input', { bubbles: true }));
+        },
+        getFilteredOptions(query) {
+            if (!query) {
+                this.options = this.allOptions;
+                return;
+            }
+            this.options = this.allOptions.filter((option) =>
+                option.title.toLowerCase().includes(query.toLowerCase()),
+            )
+        },
+    }" x-init="
+        options = allOptions;
+        let initialValue = '{{ selected_value|default:"" }}';
+        if (initialValue) {
+            selectedOption = allOptions.find(i => i.value == initialValue);
+        }
+        $watch('isOpen', (value) => { if(value) { $nextTick(() => { $refs.searchField.focus() }) } });
+    " class="relative w-full max-w-xs" x-on:keydown.escape.window="isOpen = false">
+  <!-- Hidden Input To Grab The Selected Value  -->
+  <input type="hidden" name="{{ name }}" x-ref="hiddenTextField" :value="selectedOption ? selectedOption.value : ''">
+
+  <!-- Trigger button  -->
+  <button type="button" x-ref="selectButton" @click="isOpen=!isOpen"
+    class="relative min-h-[38px] select flex items-center justify-between w-full py-2 pl-3 pr-10 text-left bg-white border rounded-md cursor-default border-neutral-300 text-sm min-w-50">
+    <span x-text="selectedOption ? selectedOption.title : '{{ placeholder }}'" class="truncate"></span>
+  </button>
+
+  <!-- Dropdown -->
+  <div x-show="isOpen" @click.away="isOpen = false" x-transition:enter="transition ease-out duration-50"
+    x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100"
+    class="absolute z-10 w-full min-w-max mt-1 overflow-auto bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none"
+    x-cloak>
+
+    <!-- Search Input -->
+    <div class="p-2">
+      <input type="text"
+        class="w-full px-3 py-2 border border-neutral-200/70 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-focus"
+        x-ref="searchField" x-on:input.debounce.300ms="getFilteredOptions($el.value)" placeholder="Buscar..." />
+    </div>
+
+    <!-- Options -->
+    <ul class="py-1 text-sm">
+      <template x-for="item in options" :key="item.value">
+        <li @click="setSelectedOption(item)"
+          class="relative flex items-center h-full py-2 pl-8 text-gray-700 cursor-default select-none hover:bg-neutral-100">
+          <svg x-show="selectedOption && selectedOption.value == item.value"
+            class="absolute left-0 w-4 h-4 ml-2 stroke-current text-neutral-400" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span class="block font-medium truncate" x-text="item.title"></span>
+        </li>
+      </template>
+      <li x-show="options.length === 0" class="px-4 py-2 text-sm text-gray-500">
+        <span>No hay resultados</span>
+      </li>
+    </ul>
+  </div>
+</div>

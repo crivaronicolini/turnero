@@ -1,15 +1,29 @@
-from datetime import time, timedelta, datetime
-from functools import lru_cache
-import logging
 import json
+import logging
+from collections import defaultdict
+from datetime import datetime, time, timedelta
+from functools import lru_cache
+
+from allauth.account.views import SignupView, login_required
 from django.db import transaction
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.utils import timezone
-from .forms import PacienteSignUpForm, DoctorSignUpForm, DoctorTurnosForm
-from allauth.account.views import SignupView, login_required
-from .models import ObraSocial, Doctor_especialidad, Sede, Turno
 
+from .forms import DoctorSignUpForm, DoctorTurnosForm, PacienteSignUpForm
+from .models import (
+    Doctor,
+    Doctor_especialidad,
+    Especialidad,
+    ObraSocial,
+    Sede,
+    Turno,
+    Paciente,
+)
+
+from django.shortcuts import get_object_or_404
+
+from django.core.paginator import Paginator
 
 # Temporary basic config for debugging
 logging.basicConfig(
@@ -182,5 +196,123 @@ def secretaria(request):
     return HttpResponse(b"hola, esto es la pagina de secretaria")
 
 
-def aber(request):
-    return render(request, "dashboard.html")
+def get_initial_context():
+    """Helper function to get the context for the main page."""
+    return {
+        "sedes": Sede.objects.all(),
+        "especialidades": Especialidad.objects.all(),
+        "doctores": Doctor.objects.select_related("user").all(),
+    }
+
+
+@login_required
+def revisar_turno(request):
+    turno_id = request.GET.get("turno_id")
+    turno = get_object_or_404(
+        Turno.objects.select_related("id_doctor__user", "id_sede", "id_especialidad"),
+        id=turno_id,
+    )
+
+    context = {"turno": turno}
+
+    if request.htmx:
+        return render(request, "pacientes/partials/revisar_turno.html", context)
+
+    context.update(get_initial_context())
+    return render(request, "pacientes/reservar_turno_inicio.html", context)
+
+
+@login_required
+def confirmar_reserva(request):
+    if request.method != "POST":
+        return HttpResponse("Método de solicitud no válido.", status=405)
+
+    turno_id = request.POST.get("turno_id")
+
+    try:
+        paciente = request.user.paciente
+    except Paciente.DoesNotExist:
+        return HttpResponse(
+            "<div class='alert alert-error'>No tiene un perfil de paciente para reservar un turno.</div>",
+            status=403,
+        )
+
+    try:
+        with transaction.atomic():
+            turno = Turno.objects.select_for_update().get(
+                id=turno_id, estado="pendiente"
+            )
+            turno.id_paciente = paciente
+            turno.estado = "ocupado"
+            turno.save()
+            return render(
+                request, "pacientes/partials/reserva_confirmada.html", {"turno": turno}
+            )
+    except Turno.DoesNotExist:
+        return HttpResponse(
+            "<div class='alert alert-warning'>Lo sentimos, este turno ya no está disponible. Por favor, seleccione otro.</div>"
+        )
+    except Exception as e:
+        logger.error("Error al confirmar la reserva: %s", e)
+        return HttpResponse(
+            "<div class='alert alert-error'>Ocurrió un error inesperado al confirmar su turno.</div>",
+            status=500,
+        )
+
+
+@login_required
+def turno_list_view(request):
+    """
+    This view handles both the initial page load and HTMX filtering
+    for the main appointment list.
+    """
+    # Get filter parameters from the request
+    sede_id = request.GET.get("sede")
+    especialidad_id = request.GET.get("especialidad")
+    doctor_id = request.GET.get("doctor")
+
+    # Start with all available appointments in the future
+    now = timezone.now()
+    turnos_qs = (
+        Turno.objects.filter(estado="pendiente", fecha__gte=now)
+        .select_related("id_doctor__user", "id_sede", "id_especialidad")
+        .order_by("fecha")
+    )
+
+    # Apply filters based on query parameters
+    if sede_id:
+        turnos_qs = turnos_qs.filter(id_sede_id=sede_id)
+    if especialidad_id:
+        turnos_qs = turnos_qs.filter(id_especialidad_id=especialidad_id)
+    if doctor_id:
+        turnos_qs = turnos_qs.filter(id_doctor_id=doctor_id)
+
+    # Paginate the results
+    paginator = Paginator(turnos_qs, 20)  # Show 20 appointments per page
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "page_obj": page_obj,
+        "selected_sede": sede_id,
+        "selected_especialidad": especialidad_id,
+        "selected_doctor": doctor_id,
+    }
+
+    # For HTMX requests, return only the partial template with the list
+    if request.htmx:
+        return render(request, "pacientes/partials/lista_turnos.html", context)
+
+    # For initial page load, get all filter options and render the full page
+    context["sedes"] = Sede.objects.all()
+    context["especialidades"] = Especialidad.objects.all()
+
+    # Prepare doctors data for the custom select component
+    all_doctores = Doctor.objects.select_related("user").all()
+    doctores_data = [
+        {"title": doc.user.get_full_name() or doc.user.username, "value": doc.id}
+        for doc in all_doctores
+    ]
+    context["doctores_json"] = json.dumps(doctores_data)
+
+    return render(request, "pacientes/turno_list_page.html", context)

@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     "django_cotton",
     "tailwind",
     "theme",
+    # HTMX
+    "django_htmx",
 ]
 
 MIDDLEWARE = [
@@ -67,6 +69,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # ALLAUTH
     "allauth.account.middleware.AccountMiddleware",
+    # HTMX
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 if DEBUG:
@@ -87,7 +91,6 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
@@ -166,7 +169,7 @@ SOCIALACCOUNT_PROVIDERS = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "es-ar"
 
 TIME_ZONE = "America/Argentina/Buenos_Aires"
 

@@ -1,0 +1,20 @@
+<div class="alert alert-success shadow-lg">
+  <div>
+    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
+      viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <span>
+      <h3 class="font-bold">¡Turno Reservado con Éxito!</h3>
+      {% comment %}
+      TODO: manejar el Dr/Dra
+      {% endcomment %}
+      <div class="text-xs">
+        Has reservado un turno para el <strong>{{ turno.fecha|date:"l, d F Y" }}</strong> a las <strong>{{
+          turno.fecha|date:"H:i" }}</strong>
+        con el Dr. {{ turno.id_doctor.user.get_full_name }}.
+      </div>
+    </span>
+  </div>
+</div>

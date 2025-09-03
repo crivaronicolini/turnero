@@ -1,0 +1,29 @@
+<h2 class="text-2xl font-semibold mb-4">Por favor, confirme su turno</h2>
+<div class="card bg-base-100 shadow-xl border">
+    <div class="card-body">
+        <p><strong>Fecha:</strong> {{ turno.fecha|date:"l, d F Y" }} a las {{ turno.fecha|date:"H:i" }}</p>
+        <p><strong>Profesional:</strong> {{ turno.id_doctor.user.get_full_name }}</p>
+        <p><strong>Especialidad:</strong> {{ turno.id_especialidad.especialidad }}</p>
+        <p><strong>Ubicación:</strong> {{ turno.id_sede.nombre }} ({{ turno.id_sede.direccion }})</p>
+        <p><strong>Duración:</strong> {{ turno.duracion }} minutos</p>
+
+        <div class="card-actions justify-end mt-6 space-x-2">
+            <!-- Cancel button re-triggers the previous calendar view -->
+            <button class="btn btn-ghost"
+                    hx-get="{% url 'turnero:turno_list_view' %}?doctor={{ turno.id_doctor.id }}&sede={{ turno.id_sede.id }}&especialidad={{ turno.id_especialidad.id }}"
+                    hx-target="#turnos-list-container"
+                    hx-swap="innerHTML">
+                Cancelar
+            </button>
+
+            <!-- Confirm button POSTs to the final booking view -->
+            <form hx-post="{% url 'turnero:confirmar_reserva' %}" hx-target="#turnos-list-container" hx-swap="innerHTML">
+                {% csrf_token %}
+                <input type="hidden" name="turno_id" value="{{ turno.id }}">
+                <button type="submit" class="btn btn-primary">
+                    Confirmar Reserva
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
