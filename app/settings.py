@@ -74,11 +74,18 @@ MIDDLEWARE = [
 ]
 
 if DEBUG:
-    # Add django_browser_reload only in DEBUG mode
-    INSTALLED_APPS += ["django_browser_reload"]
-    # Add django_browser_reload middleware only in DEBUG mode
+    INSTALLED_APPS += [
+        "django_browser_reload",
+        "django_fastdev",
+        "debug_toolbar",
+    ]
     MIDDLEWARE += [
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
         "django_browser_reload.middleware.BrowserReloadMiddleware",
+    ]
+    DEBUG_TOOLBAR_CONFIG = {"ROOT_TAG_EXTRA_ATTRS": "hx-preserve"}
+    INTERNAL_IPS = [
+        "127.0.0.1",
     ]
 
 

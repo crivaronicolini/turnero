@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 import turnero.views as views
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     path("", include("turnero.urls", namespace="turnero")),
@@ -32,6 +33,7 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += [
+        *debug_toolbar_urls(),
         path("__reload__/", include("django_browser_reload.urls")),
         path("debug/", include("turnero.debug_urls")),
     ]

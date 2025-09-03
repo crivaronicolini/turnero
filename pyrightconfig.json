@@ -1,4 +1,11 @@
 {
-  "typeCheckingMode": "basic"
+  "typeCheckingMode": "basic",
+  "plugins": [
+    {
+      "name": "django-stubs",
+      "settings": {
+        "django_settings_module": "app.settings"
+      }
+    }
+  ]
 }
-
