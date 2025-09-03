@@ -5,25 +5,24 @@ from datetime import datetime, time, timedelta
 from functools import lru_cache
 
 from allauth.account.views import SignupView, login_required
+from django.core.paginator import Paginator
 from django.db import transaction
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 
+from . import agent as turnero_agent
 from .forms import DoctorSignUpForm, DoctorTurnosForm, PacienteSignUpForm
 from .models import (
     Doctor,
     Doctor_especialidad,
     Especialidad,
     ObraSocial,
+    Paciente,
     Sede,
     Turno,
-    Paciente,
 )
-
-from django.shortcuts import get_object_or_404
-
-from django.core.paginator import Paginator
 
 # Temporary basic config for debugging
 logging.basicConfig(
@@ -316,3 +315,36 @@ def turno_list_view(request):
     context["doctores_json"] = json.dumps(doctores_data)
 
     return render(request, "pacientes/turno_list_page.html", context)
+
+
+def agent_chat(request):
+    user_message = request.POST.get("message", "")
+    if not user_message:
+        # Return an empty response if the message is empty
+        return HttpResponse("", status=204)
+
+    # Use the user's session key as a unique thread_id to maintain conversation history
+    thread_id = request.session.session_key
+    if not thread_id:
+        request.session.create()
+        thread_id = request.session.session_key
+
+    config = {"configurable": {"thread_id": thread_id}}
+
+    agent_input = {"messages": [("user", user_message)]}
+
+    response = turnero_agent.agent.invoke(agent_input, config)
+
+    logger.debug(f"{response=}")
+    agent_response = response.get("messages", [])[-1]
+
+    content = ""
+    if agent_response:
+        content = agent_response.content
+
+    context = {"message": content}
+    return render(request, "agent/partials/response.html", context)
+
+
+def agent_view(request):
+    return render(request, "agent/index.html")
