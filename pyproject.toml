@@ -60,6 +60,8 @@ profile="django"
 [dependency-groups]
 dev = [
     "django-debug-toolbar>=6.0.0",
+    "django-extensions>=4.1",
     "django-fastdev>=1.13.0",
     "django-tailwind[reload]>=4.2.0",
+    "ipython>=8.37.0",
 ]

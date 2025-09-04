@@ -81,6 +81,7 @@ if DEBUG:
         "django_browser_reload",
         "django_fastdev",
         "debug_toolbar",
+        "django_extensions",
     ]
     MIDDLEWARE += [
         "debug_toolbar.middleware.DebugToolbarMiddleware",
