@@ -12,6 +12,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
+import turnero.querys as qry
+
 from . import agent as turnero_agent
 from .forms import DoctorSignUpForm, DoctorTurnosForm, PacienteSignUpForm
 from .models import (
@@ -56,14 +58,9 @@ day_to_iso = {
 }
 
 
-@lru_cache
-def get_sedes():
-    return {sede.nombre: sede for sede in Sede.objects.all()}
-
-
 @login_required
 def doctores_turnos(request):
-    sedes = get_sedes()
+    sedes = qry.get_sedes()
     print(sedes)
     if request.method == "POST":
         form = DoctorTurnosForm(request.POST)
@@ -183,10 +180,7 @@ class PacienteSignupView(SignupView):
 
     def get_context_data(self, form=None):
         context = super().get_context_data()
-        mapping = {
-            obra_social.id: list(obra_social.planes.values("id", "nombre"))
-            for obra_social in ObraSocial.objects.all()
-        }
+        mapping = qry.get_planes()
         context["obra_social_planes_json"] = json.dumps(mapping)
         return context
 
@@ -270,7 +264,6 @@ def turno_list_view(request):
     especialidad_id = request.GET.get("especialidad")
     doctor_id = request.GET.get("doctor")
 
-    # Start with all available appointments in the future
     now = timezone.now()
     turnos_qs = (
         Turno.objects.filter(estado="pendiente", fecha__gte=now)
