@@ -7,8 +7,8 @@ from django.forms import ValidationError
 
 
 class PacienteSignUpForm(SignupForm):
-    nombre = forms.CharField(label="Nombre", max_length=255)
-    apellidos = forms.CharField(label="Apellidos", max_length=255)
+    first_name = forms.CharField(label="Nombre", max_length=255)
+    last_name = forms.CharField(label="Apellidos", max_length=255)
     dni = forms.CharField(label="DNI", max_length=20)
     fecha_nac = forms.DateField(
         label="Fecha de nacimiento",
@@ -33,8 +33,8 @@ class PacienteSignUpForm(SignupForm):
         field_order = [
             "email",
             "password1",
-            "nombre",
-            "apellidos",
+            "first_name",
+            "last_name",
             "dni",
             "fecha_nac",
             "nro_afiliado",
@@ -45,8 +45,8 @@ class PacienteSignUpForm(SignupForm):
 
 
 class DoctorSignUpForm(SignupForm):
-    nombre = forms.CharField(label="Nombre", max_length=255)
-    apellidos = forms.CharField(label="Apellidos", max_length=255)
+    first_name = forms.CharField(label="Nombre", max_length=255)
+    last_name = forms.CharField(label="Apellidos", max_length=255)
     dni = forms.CharField(label="DNI", max_length=20)
     fecha_nac = forms.DateField(
         label="Fecha de nacimiento",
@@ -69,8 +69,8 @@ class DoctorSignUpForm(SignupForm):
         field_order = [
             "email",
             "password1",
-            "nombre",
-            "apellidos",
+            "first_name",
+            "last_name",
             "dni",
             "fecha_nac",
             "matricula",

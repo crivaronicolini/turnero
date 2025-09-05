@@ -30,19 +30,19 @@ class User(AbstractUser):
     )
 
     dni = models.CharField(max_length=20, unique=True)
-    nombre = models.CharField(max_length=255)
-    apellidos = models.CharField(max_length=255)
+    # nombre = models.CharField(max_length=255)
+    # apellidos = models.CharField(max_length=255)
     fecha_nac = models.DateField()
     fecha_creado = models.DateField(auto_now_add=True)
 
     objects = UserManager()
     REQUIRED_FIELDS = ["email", "dni", "fecha_nac", "rol"]
 
-    def __str__(self):
-        return f"{self.nombre}, {self.apellidos} - dni: {self.dni}"
+    # def __str__(self):
+    #     return f"{self.nombre}, {self.apellidos} - dni: {self.dni}"
 
-    def get_full_name(self):
-        return f"{self.nombre} {self.apellidos}".strip()
+    # def get_full_name(self):
+    #     return f"{self.nombre} {self.apellidos}".strip()
 
 
 class ObraSocial(models.Model):
