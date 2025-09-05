@@ -1,4 +1,4 @@
-{% extends "account/signup.html" %}
+{% extends "allauth/layouts/base.html" %}
 {% load i18n %}
 {% load allauth_ui %}
 {% load widget_tweaks %}
@@ -19,8 +19,8 @@
 {% block script %}
 <script>
   const obraPlanesMap = {{ obra_social_planes_json|safe }};
-  const obraSelect = document.getElementById("obra_social");
-  const planSelect = document.getElementById("plan");
+  const obraSelect = document.getElementById("id_obra_social");
+  const planSelect = document.getElementById("id_plan");
   planSelect.innerHTML = "";
 
   obraSelect.addEventListener("change", function() {

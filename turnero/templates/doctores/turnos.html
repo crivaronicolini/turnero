@@ -4,7 +4,7 @@
     <h1 class="text-2xl font-bold mb-6">Horarios de atención</h1>
     <p class="mb-5">Ingrese sus días de atención en el calendario, y los días de la semana que atenderá en esas fechas.</p>
 
-    <form method="post" action='{% url "doctores_turnos" %}' x-data="workingHours()" @submit="submitWorkingHours()" class="space-y-4" x-id="['dateRange']">
+    <form method="post" action='{% url "turnero:doctores_turnos" %}' x-data="workingHours()" @submit="submitWorkingHours()" class="space-y-4" x-id="['dateRange']">
       {% csrf_token %}
 
 

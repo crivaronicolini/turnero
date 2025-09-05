@@ -27,6 +27,10 @@ class PacienteSignUpForm(SignupForm):
         label="Plan", queryset=Plan.objects.all(), empty_label="Seleccione un Plan"
     )
 
+    # borrar los input the allauth que no se usan
+    clean_username = None
+    clean_email2 = None
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -62,6 +66,10 @@ class DoctorSignUpForm(SignupForm):
         ),
         label="Especialidades",
     )
+
+    # borrar los input the allauth que no se usan
+    clean_username = None
+    clean_email2 = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
