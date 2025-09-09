@@ -38,11 +38,8 @@ class User(AbstractUser):
     objects = UserManager()
     REQUIRED_FIELDS = ["email", "dni", "fecha_nac", "rol"]
 
-    # def __str__(self):
-    #     return f"{self.nombre}, {self.apellidos} - dni: {self.dni}"
-
-    # def get_full_name(self):
-    #     return f"{self.nombre} {self.apellidos}".strip()
+    def __str__(self):
+        return f"{self.first_name}, {self.last_name}, DNI: {self.dni}"
 
 
 class ObraSocial(models.Model):
