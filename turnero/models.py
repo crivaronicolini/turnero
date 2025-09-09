@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-from turnero.managers import UserManager
+from turnero.managers import UserManager, PacienteManager
 
 
 class Sede(models.Model):
@@ -76,8 +76,10 @@ class Paciente(models.Model):
     nro_afiliado = models.CharField(max_length=20)
     plan = models.ForeignKey(Plan, on_delete=models.PROTECT, related_name="pacientes")
 
+    objects = PacienteManager()
+
     def __str__(self):
-        return f"{self.user}"
+        return f"{self.user}, plan: {self.plan}, obra social: {self.plan.obra_social}"
 
 
 class Doctor(models.Model):
