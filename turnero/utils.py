@@ -111,25 +111,25 @@ def seed_database():
         print("\nSeeding Sedes...")
         sedes_data = [
             {
-                "nombre": "Sede Abasto",
+                "nombre": "Abasto",
                 "direccion": "Av. Corrientes 3220",
                 "telefono": "4883123",
                 "horarios": "9 a 22hs, Lunes a Sabado",
             },
             {
-                "nombre": "Sede Palermo",
+                "nombre": "Palermo",
                 "direccion": "Av. Santa Fe 3047",
                 "telefono": "4299121",
                 "horarios": "9 a 22hs, Lunes a Sabado",
             },
             {
-                "nombre": "Sede Microcentro",
+                "nombre": "Microcentro",
                 "direccion": "Viamonte 1355",
                 "telefono": "4988191",
                 "horarios": "9 a 22hs, Lunes a Sabado",
             },
             {
-                "nombre": "Sede Caballito",
+                "nombre": "Caballito",
                 "direccion": "Av. Rivadavia 5010",
                 "telefono": "4903333",
                 "horarios": "9 a 22hs, Lunes a Sabado",
