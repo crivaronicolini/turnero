@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 
 def index(request):
-    return HttpResponse(b"hola, esto es el index")
+    return render(request, "landing.html")
 
 
 def turnos(request):
@@ -326,7 +326,9 @@ def agent_chat(request):
 
     agent_input = {"messages": [("user", user_message)]}
 
-    response = turnero_agent.agent.invoke(agent_input, config)
+    response = turnero_agent.agent.invoke(
+        agent_input, config, context={"user": request.user}
+    )
 
     logger.debug(f"{response=}")
     agent_response = response.get("messages", [])[-1]
