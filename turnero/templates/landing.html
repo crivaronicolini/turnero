@@ -1,0 +1,109 @@
+{% load static tailwind_tags %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calm - Time to rest.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair:opsz,wdth,wght@5..1200,87.5,900&display=swap" rel="stylesheet">
+ 
+  {% tailwind_css %}
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .playfair-900 {
+      font-family: "Playfair", serif;
+      font-optical-sizing: auto;
+      font-weight: 900;
+      font-style: bold;
+      font-variation-settings:
+        "wdth" 87.5;
+    }
+
+    .animated-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: radial-gradient(ellipse at center, rgb(255, 255, 255) 0%, #e3f2fd 40%, #bbdefb 60%, #e1bee7 80%);
+      background-size: 200% 200%;
+      <!-- animation: gradient-animation 20s ease infinite; -->
+    }
+
+    .vignette-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(ellipse at center, transparent 0%, transparent 60%, rgba(255, 255, 255, 0.8) 100%);
+      pointer-events: none;
+      /* Allows clicks to pass through */
+    }
+
+    @keyframes gradient-animation {
+      0% {
+        background-position: 50% 50%;
+      }
+
+      25% {
+        background-position: 100% 0%;
+      }
+
+      50% {
+        background-position: 0% 100%;
+      }
+
+      75% {
+        background-position: 100% 100%;
+      }
+
+      100% {
+        background-position: 50% 50%;
+      }
+    }
+  </style>
+</head>
+
+<body class="relative overflow-hidden min-h-screen flex flex-col">
+  <div class="animated-background"></div>
+  <div class="vignette-overlay"></div>
+  <div class="p-4 sm:p-8 w-full max-w-6xl mx-auto flex flex-col flex-grow">
+    <nav
+      class="w-full flex justify-between items-center px-4 py-3 sm:px-6 sm:py-3 mt-8 mb-auto bg-white/70 rounded-full shadow-md backdrop-blur-md">
+      <div class="font-bold text-xl sm:text-2xl text-gray-900 hover:text-gray-600">Felio</div>
+      <div class="hidden md:flex gap-8 items-center">
+        <a href="#" class="font-medium text-gray-600 hover:text-gray-900 transition-colors">Features</a>
+        <a href="#" class="font-medium text-gray-600 hover:text-gray-900 transition-colors">About Us</a>
+        <a href="#" class="font-medium text-gray-600 hover:text-gray-900 transition-colors">Contacto</a>
+      </div>
+      <div class="flex justify-between items-center gap-7">
+        <a href="{% url 'account_login' %}" class="font-medium text-gray-600 hover:text-gray-900 transition-colors">Entrar</a>
+        <a href="{% url 'pacientes_signup' %}"
+        class="bg-black text-white px-5 py-2 sm:px-6 sm:py-3 rounded-full font-semibold transition-colors hover:bg-gray-800">Hablar</a>
+      </div>
+    </nav>
+    <div class="flex-grow flex flex-col justify-center items-center text-center">
+      <h1 class="text-4xl sm:text-8xl playfair-900 leading-tight text-gray-900 mt-16 sm:mt-24">Y si un Agente Personal sacara tus turnos?</h1>
+      <p class="text-md sm:text-lg font-normal text-gray-600 max-w-[450px] mt-4">Un asistente IA que cuida tu salud por vos<br>para que puedas simplemente seguir con tu día.</p>
+      <a href="#"
+        class="inline-flex items-center gap-2 font-semibold text-gray-900 px-6 py-3 rounded-full border border-gray-300 bg-white mt-8 transition-all duration-50 hover:bg-gray-50 hover:border-gray-500 hover:transform hover:-translate-y-0.5">
+        Conocer mas
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-arrow-right transition-transform duration-50 group-hover:translate-x-1">
+          <path d="M5 12h14" />
+          <path d="m12 5 7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</body>
+
+</html>

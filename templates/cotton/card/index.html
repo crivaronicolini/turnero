@@ -1,4 +1,10 @@
-<div class="bg-gray-50 flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+<div class="bg-gray-50 flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8
+    {% if class %}
+        {{ class }}
+    {% endif %}
+    "
+    {{ attrs }}
+     >
   <div class="max-w-lg w-full bg-white p-8 sm:p-10 rounded-xl shadow-lg space-y-6">
     {{ slot }}
   </div>

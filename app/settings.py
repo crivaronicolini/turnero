@@ -34,7 +34,7 @@ TAILWIND_APP_NAME = "theme"
 
 DATE_INPUT_FORMATS = ["%d/%m/%Y"]
 
-ALLAUTH_UI_THEME = "light"
+ALLAUTH_UI_THEME = "mlight"
 
 # Application definition
 
