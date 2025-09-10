@@ -9,7 +9,6 @@ app_name = "turnero"
 urlpatterns = [
     path("", views.index, name="index"),
     # pacientes
-    path("turnos/", views.turnos),
     path("pacientes/", views.pacientes),
     path("pacientes/signup", views.PacienteSignupView.as_view(), name="pacientes_signup"),
 
@@ -18,7 +17,7 @@ urlpatterns = [
     path("agent/chat/", views.agent_chat, name="agent_chat"),
 
     # Main patient-facing view to find and book appointments
-    path('turnos-disponibles/', views.turno_list_view, name='turno_list_view'),
+    path('turnos/', views.turno_list_view, name='turno_list_view'),
 
     # # The rest of the booking flow (partials loaded by HTMX)
     path('revisar-turno/', views.revisar_turno, name='revisar_turno'),
